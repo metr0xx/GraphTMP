@@ -8,11 +8,13 @@ public class Graph
 
     public Graph(List<List<int>> adjacencyMatrix)
     {
+        if (adjacencyMatrix.Count == 0 || adjacencyMatrix.Any(row => row.Count != adjacencyMatrix.Count)
+            || adjacencyMatrix.Find(e => e.Any(item => item < -1 || item > 1)) != null) throw new Exception("Задана некорректная матрица смежности");
+
         _adjacencyMatrix = adjacencyMatrix;
         FillVertexMatrix();
         FillArcs();
     }
-
 
     /// <summary>
     /// возвращает индекс первой вершины, смежной с вершиной v. Если вершина v не имеет смежных вершин, то возвращается "нулевая" вершина
@@ -303,8 +305,7 @@ public class Graph
 
             for (int j = 0; j < _adjacencyMatrix[i].Count; j++)
             {
-                if (j == i && _adjacencyMatrix[i][j] != 0) throw new Exception("Задан некорректный граф");
-
+                if (j == i && _adjacencyMatrix[i][j] != 0 || Math.Abs(_adjacencyMatrix[i][j]) == 1 && _adjacencyMatrix[j][i] == 0) throw new Exception("Задана некорректная матрица смежности");
                 _vertexMatrix[i].Add(new MatrixItem()
                 {
                     RowName = ((char)(i + 97)).ToString(),
