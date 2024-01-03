@@ -197,13 +197,15 @@ public class Graph
     /// </summary>
     public void EditArcWeight(string from, string to, int weight) => (_arcs.Find(arc => arc.From == from && arc.To == to) ?? throw new Exception("Дуга не найдена")).Weight = weight;
 
+
     /// <summary>
     /// Определить, есть ли какой-либо путь, проходящий через ВСЕ вершины орграфа,
     /// причем через вершину можно проходить только один раз,
     /// а начальная и конечная вершины не должны быть смежными, и вывести его на экран
     /// </summary>
-    public bool HasWay()
+    public string HasWay()
     {
+        var way = string.Empty;
         var graph = GetGraph();
         var destinations = Enumerable.Range(0, _vertexMatrix[0].Count).ToList();
 
@@ -212,17 +214,17 @@ public class Graph
             foreach (var to in destinations)
             {
                 if (graph[from].Contains(to) || from == to) continue;
-                if (DFS(graph, from, to)) return true;
+                if (DFS(graph, from, to, ref way)) return way;
             }
         }
 
-        return false;
+        return "Пути не существует";
     }
 
     /// <summary>
     /// алгоритм обхода графа в глубину
     /// </summary>
-    private bool DFS(Dictionary<int, List<int>> graph, int from, int to, List<int>? visited = null)
+    private bool DFS(Dictionary<int, List<int>> graph, int from, int to, ref string way, List<int>? visited = null)
     {
         if (visited is null)
         {
@@ -232,14 +234,16 @@ public class Graph
 
         if (from == to && visited.Sum() == _vertexMatrix[0].Count) return true;
         if (visited[from] == 1) return false;
-
+   
         visited[from]++;
+        way += $"{from}";
 
         foreach (var neighbor in graph[from])
         {
-            if (DFS(graph, neighbor, to, visited)) return true;
+            if (DFS(graph, neighbor, to, ref way, visited)) return true;
         }
 
+        way = string.Empty;
         return false;
     }
 
@@ -336,5 +340,5 @@ public class Graph
                 });
             }
         }
-    } 
+    }
 }

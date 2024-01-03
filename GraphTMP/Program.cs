@@ -23,8 +23,9 @@ var g2 = new Graph([
     [1, 0, 0, 0, 0],
     [1, 0, 0, 0, 0]]);
 
-
+g1.PrintGraph();
 Console.WriteLine(g1.HasWay());
+g2.PrintGraph();
 Console.WriteLine(g2.HasWay());
 
 //Console.WriteLine(g.First("b"));
